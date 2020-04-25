@@ -41,7 +41,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
-        private float angleBetween;
 
         // Use this for initialization
         private void Start()
@@ -62,8 +61,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
-            // Forgasd a testet a kamera helyett, vagy eulerAngles vissza adja a kamera rotat
-            //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.eulerAngles.y, transform.localEulerAngles.z);
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -94,14 +91,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_NextStep = m_StepCycle + .5f;
         }
 
-        public GameObject mainCam;
+
         private void FixedUpdate()
         {
             float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at
-            Vector3 desiredMove = mainCam.transform.forward*m_Input.y + mainCam.transform.right*m_Input.x;
-            
+            Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
+
             // get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
@@ -206,7 +203,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void GetInput(out float speed)
         {
-            
             // Read input
             float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
             float vertical = CrossPlatformInputManager.GetAxis("Vertical");
@@ -237,13 +233,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
-        
+
         private void RotateView()
         {
-            
-             
-            
-            //m_MouseLook.LookRotation (transform, m_Camera.transform);
+            m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
 
