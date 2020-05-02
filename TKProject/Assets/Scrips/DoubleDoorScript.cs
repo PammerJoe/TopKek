@@ -18,7 +18,7 @@ public class DoubleDoorScript : MonoBehaviour
         if (other.tag == "MainCamera")
         {
             
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && !_animator.GetBool("Locked"))
             {
                 if (_animator.GetBool("Opened"))
                 {

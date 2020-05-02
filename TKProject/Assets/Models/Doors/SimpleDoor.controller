@@ -11,6 +11,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Opened
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Locked
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4034209350431405779}
   m_Solo: 0
@@ -35,6 +38,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: Opened
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Locked
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3965825583178092681}
@@ -112,6 +118,12 @@ AnimatorController:
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Opened
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Locked
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
