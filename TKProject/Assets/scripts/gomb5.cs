@@ -6,13 +6,14 @@ public class gomb5 : MonoBehaviour
 {
     public Renderer Rend;
     public GameObject cube1, cube2, cube3, cube4, cube5;
-    
+    public bool pressed;
     
     void Start()
     {
         
         Rend = GetComponent<Renderer>();
         Rend.enabled = true;
+        pressed = false;
     }
 
     void Update()
@@ -26,16 +27,21 @@ public class gomb5 : MonoBehaviour
 
     void OnMouseDown()
     {
+        gomb1 gomb_1 = cube1.GetComponent<gomb1>();
+        gomb2 gomb_2 = cube2.GetComponent<gomb2>();
+        gomb3 gomb_3 = cube3.GetComponent<gomb3>();
+        gomb4 gomb_4 = cube4.GetComponent<gomb4>();
+        
         if (Input.GetMouseButtonDown(0))
         {
             GetComponent<Animator>().Play("cubePressed");
-            if (cube1.gameObject.GetComponent<Renderer>().material.color == Color.green)
+            if (gomb_1.pressed == true)
             {
-                GetComponent<Renderer>().material.color = Color.green;
+                pressed = true;
             }
-            else if (cube1.gameObject.GetComponent<Renderer>().material.color == Color.red)
+            else if (gomb_1.pressed == false)
             {
-                GetComponent<Renderer>().material.color = Color.red;
+                pressed = false;
             }
         }
     }

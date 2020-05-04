@@ -9,25 +9,31 @@ public class gomb4 : MonoBehaviour
     public GameObject szoveg;
     private Animator _animator;
     bool mindenzold = false;
+    public bool pressed;
 
     void Start()
     {
         _animator = firstDoor.GetComponent<Animator>();
         Rend = GetComponent<Renderer>();
         Rend.enabled = true;
+        pressed = false;
     }
 
     void Update()
     {
-        if (cube2.gameObject.GetComponent<Renderer>().material.color == Color.red)
+        gomb1 gomb_1 = cube1.GetComponent<gomb1>();
+        gomb2 gomb_2 = cube2.GetComponent<gomb2>();
+        gomb3 gomb_3 = cube3.GetComponent<gomb3>();
+        gomb5 gomb_5 = cube5.GetComponent<gomb5>();
+        if (gomb_2.pressed == false)
         {
-            GetComponent<Renderer>().material.color = Color.red;
+            pressed = false;
         }
-        if (cube1.gameObject.GetComponent<Renderer>().material.color == Color.green && 
-            cube5.gameObject.GetComponent<Renderer>().material.color == Color.green &&
-            cube3.gameObject.GetComponent<Renderer>().material.color == Color.green &&
-            cube2.gameObject.GetComponent<Renderer>().material.color == Color.green &&
-            cube4.gameObject.GetComponent<Renderer>().material.color == Color.green)
+        if (gomb_1.pressed == true &&
+            gomb_5.pressed == true &&
+            gomb_3.pressed == true &&
+            gomb_2.pressed == true &&
+            pressed == true)
         {
             mindenzold = true;
         }
@@ -43,15 +49,19 @@ public class gomb4 : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            gomb1 gomb_1 = cube1.GetComponent<gomb1>();
+            gomb2 gomb_2 = cube2.GetComponent<gomb2>();
+            gomb3 gomb_3 = cube3.GetComponent<gomb3>();
+            gomb4 gomb_4 = cube4.GetComponent<gomb4>();
             GetComponent<Animator>().Play("cubePressed");
-            if (cube2.gameObject.GetComponent<Renderer>().material.color == Color.green)
+            if (gomb_2.pressed == true)
             {
-                GetComponent<Renderer>().material.color = Color.green;
+                pressed = true;
             }
-            else if (cube2.gameObject.GetComponent<Renderer>().material.color == Color.red)
+            else if (gomb_2.pressed == false)
             {
-                GetComponent<Renderer>().material.color = Color.red;
-                cube1.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                pressed = false;
+                gomb_1.pressed = false;
             }
         }
     }

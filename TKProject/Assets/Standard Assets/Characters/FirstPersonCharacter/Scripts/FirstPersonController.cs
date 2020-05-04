@@ -41,6 +41,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        public bool observing;
+        public float observeDistance;
+        public bool canObserve;
 
         // Use this for initialization
         private void Start()
@@ -54,13 +57,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_NextStep = m_StepCycle/2f;
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
+            //m_AudioSource.volume(1);
 			m_MouseLook.Init(transform , m_Camera.transform);
+            observing = false;
+            canObserve = false;
         }
 
-        
+        public GameObject observeText;
         // Update is called once per frame
         private void Update()
         {
+            if (canObserve)
+            {
+                observeText.SetActive(true);
+            } else
+            {
+                observeText.SetActive(false);
+            }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -83,7 +96,28 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
 
-            
+            if (observing == false)
+            {
+                RaycastHit hit;
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, observeDistance) &&
+                    // if raycast hits, it checks if it hit an object with the tag Player
+                    //if (Physics.Raycast(transform.position, transform.forward, out hit, observeDistance) &&
+                            hit.transform.tag == "Observable")
+
+                {
+                    canObserve = true;
+                    //show text
+
+                } else
+                {
+                    canObserve = false;
+                }
+            }
+            else
+            {
+                canObserve = false;
+            }
 
         }
 
@@ -135,6 +169,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             UpdateCameraPosition(speed);
 
             m_MouseLook.UpdateCursorLock();
+
+
+            
+
         }
 
 
@@ -207,40 +245,47 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void GetInput(out float speed)
         {
-            // Read input
-            float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
-            float vertical = CrossPlatformInputManager.GetAxis("Vertical");
+            if (observing == false)
+            {
+                // Read input
+                float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
+                float vertical = CrossPlatformInputManager.GetAxis("Vertical");
 
-            bool waswalking = m_IsWalking;
+                bool waswalking = m_IsWalking;
 
 #if !MOBILE_INPUT
-            // On standalone builds, walk/run speed is modified by a key press.
-            // keep track of whether or not the character is walking or running
-            m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
+                // On standalone builds, walk/run speed is modified by a key press.
+                // keep track of whether or not the character is walking or running
+                m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
 #endif
-            // set the desired speed to be walking or running
-            speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
-            m_Input = new Vector2(horizontal, vertical);
+                // set the desired speed to be walking or running
+                speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
+                m_Input = new Vector2(horizontal, vertical);
 
-            // normalize input if it exceeds 1 in combined length:
-            if (m_Input.sqrMagnitude > 1)
-            {
-                m_Input.Normalize();
-            }
+                // normalize input if it exceeds 1 in combined length:
+                if (m_Input.sqrMagnitude > 1)
+                {
+                    m_Input.Normalize();
+                }
 
-            // handle speed change to give an fov kick
-            // only if the player is going to a run, is running and the fovkick is to be used
-            if (m_IsWalking != waswalking && m_UseFovKick && m_CharacterController.velocity.sqrMagnitude > 0)
+                // handle speed change to give an fov kick
+                // only if the player is going to a run, is running and the fovkick is to be used
+                if (m_IsWalking != waswalking && m_UseFovKick && m_CharacterController.velocity.sqrMagnitude > 0)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
+                }
+            } else
             {
-                StopAllCoroutines();
-                StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
+                speed = 0;
             }
         }
 
 
         private void RotateView()
         {
-            m_MouseLook.LookRotation (transform, m_Camera.transform);
+            if (observing == false)
+                m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
 
