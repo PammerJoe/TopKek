@@ -10,6 +10,8 @@ public class gomb4 : MonoBehaviour
     private Animator _animator;
     bool mindenzold = false;
     public bool pressed;
+    public GameObject missionPanel;
+    private bool completedMission;
 
     void Start()
     {
@@ -17,6 +19,7 @@ public class gomb4 : MonoBehaviour
         Rend = GetComponent<Renderer>();
         Rend.enabled = true;
         pressed = false;
+        completedMission = false;
     }
 
     void Update()
@@ -37,12 +40,15 @@ public class gomb4 : MonoBehaviour
         {
             mindenzold = true;
         }
-        if(mindenzold == true)
+        if (mindenzold == true && completedMission == false)
         {
+            completedMission = true;
             _animator.SetBool("Locked", false);
+            _animator.SetBool("Opened", true);
             szoveg.SetActive(true);
-        }
+            missionPanel.GetComponent<MissionProgress>().changeMission(3);
 
+        }
     }
 
     void OnMouseDown()

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Cube1
   - Observable
+  - InfoItem
+  - DoorPart
+  - InfoItemMission
   layers:
   - Default
   - TransparentFX

@@ -1,8 +1,11 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
@@ -41,6 +44,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        private bool showInfo;
         public bool observing;
         public float observeDistance;
         public bool canObserve;
@@ -61,22 +65,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
             observing = false;
             canObserve = false;
-        }
+            showInfo = false;
+            
 
+        }
+        private TextMeshPro TMP;
         public GameObject observeText;
+        public GameObject infoText;
+
+        public string infoTextString;
         // Update is called once per frame
         private void Update()
         {
-            if (canObserve)
-            {
+            if (canObserve) {
                 observeText.SetActive(true);
-            } else
-            {
+            } else if (showInfo) {
+                infoText.GetComponent<TextMeshProUGUI>().text = infoTextString;
+                
+                infoText.SetActive(true);
+            } else {
+                infoText.SetActive(false);
                 observeText.SetActive(false);
             }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
-            if (!m_Jump)
+            if (!m_Jump && !observing)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
@@ -100,27 +113,38 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 RaycastHit hit;
                 var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, observeDistance) &&
-                    // if raycast hits, it checks if it hit an object with the tag Player
-                    //if (Physics.Raycast(transform.position, transform.forward, out hit, observeDistance) &&
-                            hit.transform.tag == "Observable")
-
-                {
+                if (Physics.Raycast(ray, out hit, observeDistance) && hit.transform.tag == "Observable"){
                     canObserve = true;
                     //show text
 
-                } else
+                } else if(Physics.Raycast(ray, out hit, observeDistance-1) && hit.transform.tag == "InfoItem"){
+                    //infoTextString = hit.transform.gameObject.GetComponent<Info>();
+                    hit.transform.SendMessage("HitByRay");
+                    //Debug.Log("Sent");
+                    showInfo = true;
+                }
+                else if (Physics.Raycast(ray, out hit, observeDistance) && hit.transform.tag == "InfoItemMission")
                 {
+                    //infoTextString = hit.transform.gameObject.GetComponent<Info>();
+                    hit.transform.SendMessage("HitByRay");
+                    //Debug.Log("Sent");
+                    showInfo = true;
+                } else {
                     canObserve = false;
+                    showInfo = false;
                 }
             }
             else
             {
                 canObserve = false;
+                showInfo = false;
             }
 
         }
 
+        public void setInfoTextString(string _newtext){
+            infoTextString = "¤ " + _newtext;
+        }
 
         private void PlayLandingSound()
         {
@@ -147,7 +171,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.z = desiredMove.z*speed;
 
 
-            if (m_CharacterController.isGrounded)
+            if (m_CharacterController.isGrounded && !observing)
             {
                 m_MoveDir.y = -m_StickToGroundForce;
 
@@ -167,9 +191,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             ProgressStepCycle(speed);
             UpdateCameraPosition(speed);
-
-            m_MouseLook.UpdateCursorLock();
-
+            if (!observing)
+            {
+                m_MouseLook.UpdateCursorLock();
+            }
 
             
 
@@ -303,6 +328,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+        }
+
+        public void setObserving(bool bl)
+        {
+            observing = bl;
         }
     }
 }
