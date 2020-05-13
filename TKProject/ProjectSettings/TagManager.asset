@@ -9,6 +9,7 @@ TagManager:
   - InfoItem
   - DoorPart
   - InfoItemMission
+  - Key
   layers:
   - Default
   - TransparentFX

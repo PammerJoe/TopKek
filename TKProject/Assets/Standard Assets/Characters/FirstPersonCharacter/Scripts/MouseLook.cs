@@ -74,7 +74,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void InternalLockUpdate()
         {
-            if(Input.GetKeyUp(KeyCode.Escape))
+            if(Input.GetKeyUp(KeyCode.Comma))
             {
                 m_cursorIsLocked = false;
             }
@@ -82,7 +82,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_cursorIsLocked = true;
             }
-
+            m_cursorIsLocked = true;
             if (m_cursorIsLocked)
             {
                 Cursor.lockState = CursorLockMode.Locked;

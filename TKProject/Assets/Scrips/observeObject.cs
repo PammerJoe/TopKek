@@ -37,7 +37,7 @@ public class observeObject : MonoBehaviour
     void OnMouseDown()
     {
         FirstPersonController FPSC = FPSController.GetComponent<FirstPersonController>();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !FPSC.showMenu)
         {
             
             if (!FPSC.observing && FPSC.canObserve)
@@ -67,6 +67,7 @@ public class observeObject : MonoBehaviour
                 render.material = observeMaterial;
             }
             else {
+                
                 this.gameObject.transform.position = posStart;
                 this.gameObject.transform.rotation = rotStart;
                 FPSC.observing = false;

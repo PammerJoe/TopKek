@@ -9,7 +9,7 @@ public class MissionProgress : MonoBehaviour
     public GameObject warningMark;
     public AudioClip missionSound;
     public GameObject mainCam;
-    public GameObject manQ1, manQ2, manQ3;
+    public GameObject manQ1, manQ2, manQ3, manQ4;
     private int missionNum;
     private Quaternion originalRot;
     private Vector3 originalPos;
@@ -21,6 +21,7 @@ public class MissionProgress : MonoBehaviour
     private float normValue;
     private int currentMission;
     private GameObject scasec, scaseo;
+    public bool gotKeys = false;
 
     // Start is called before the first frame update
     void Start()
@@ -104,6 +105,15 @@ public class MissionProgress : MonoBehaviour
                 case 5: // Szamologep helyes kod es = lenyomasa utan
                     missionText.GetComponent<Text>().text = "Ez fura.. az eredmény megadása után mintha hallottam volna az egyik ajtót kinyílni!\n( Keresd meg a kinyílt ajtót. )";
                     break;
+            case 6: // Gepterembe lepes
+                missionText.GetComponent<Text>().text = "Hmm.. Miért vannak ezek a gépek még bekapcsolva? Talán van rajtuk információ ami segíthet kijutni.. Nagyon remélem..\n( Vizsgáld meg a monitorokat! )";
+                break;
+            case 7: // Teszt max pontos
+                missionText.GetComponent<Text>().text = "Sikerült! De.. ez hogyan segíthet kijutni?\n( Próbálj meg kijutni. )";
+                break;
+            case 8: // Elvettuk a kulcsot
+                missionText.GetComponent<Text>().text = "Egy kulcs! Egy bábúval.. félek tőle, de úgy néz ki segít..\n( Találtál egy kulcsot, lehet ezzel tudsz kijutni? )";
+                break;
 
             default: // Jatek kezdete
                     missionText.GetComponent<Text>().text = "Valamiért nem nyílik az ajtó, talán a portán ki lehet nyitni?\n( Nyisd ki az ajtót a portán. )";
@@ -121,16 +131,25 @@ public class MissionProgress : MonoBehaviour
                 manQ1.SetActive(true);
                 manQ2.SetActive(false);
                 manQ3.SetActive(false);
+                manQ4.SetActive(false);
                 break;
             case 2:
                 manQ1.SetActive(false);
                 manQ2.SetActive(true);
                 manQ3.SetActive(false);
+                manQ4.SetActive(false);
                 break;
             case 3:
                 manQ1.SetActive(false);
                 manQ2.SetActive(false);
                 manQ3.SetActive(true);
+                manQ4.SetActive(false);
+                break;
+            case 7:
+                manQ1.SetActive(false);
+                manQ2.SetActive(false);
+                manQ3.SetActive(false);
+                manQ4.SetActive(true);
                 break;
             default:
                 manQ1.SetActive(false); ;

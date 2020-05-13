@@ -233,6 +233,7 @@ MonoBehaviour:
   cube3: {fileID: 333351092}
   cube4: {fileID: 1962562588}
   cube5: {fileID: 310366252}
+  pressed: 0
 --- !u!1 &160123481
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +419,7 @@ MonoBehaviour:
   cube3: {fileID: 333351092}
   cube4: {fileID: 1962562588}
   cube5: {fileID: 310366252}
+  pressed: 0
 --- !u!1 &333351092
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,6 +532,7 @@ MonoBehaviour:
   cube3: {fileID: 333351092}
   cube4: {fileID: 1962562588}
   cube5: {fileID: 310366252}
+  pressed: 0
 --- !u!1 &333998565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,7 +1481,10 @@ MonoBehaviour:
   cube3: {fileID: 333351092}
   cube4: {fileID: 1962562588}
   cube5: {fileID: 310366252}
+  firstDoor: {fileID: 0}
   szoveg: {fileID: 1552841841}
+  pressed: 0
+  missionPanel: {fileID: 0}
 --- !u!1 &2019747741
 GameObject:
   m_ObjectHideFlags: 0
@@ -1591,3 +1597,4 @@ MonoBehaviour:
   cube3: {fileID: 333351092}
   cube4: {fileID: 1962562588}
   cube5: {fileID: 310366252}
+  pressed: 0

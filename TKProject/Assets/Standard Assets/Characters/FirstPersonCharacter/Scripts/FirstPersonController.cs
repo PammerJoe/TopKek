@@ -48,10 +48,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public bool observing;
         public float observeDistance;
         public bool canObserve;
+        public GameObject inGameMenu;
+        public bool showMenu;
+
+        
 
         // Use this for initialization
         private void Start()
         {
+            showMenu = false;
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -72,11 +77,46 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private TextMeshPro TMP;
         public GameObject observeText;
         public GameObject infoText;
-
+        bool coPrev;
+        bool oPrev;
         public string infoTextString;
         // Update is called once per frame
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (!showMenu)
+                {
+                    coPrev = canObserve;
+                    oPrev = observing;
+                }
+                if (showMenu)
+                {
+                    showMenu = false;
+                    inGameMenu.SetActive(false);
+                    canObserve = coPrev;
+                    observing = oPrev;
+
+                    showInfo = false;
+                    if (canObserve && !observing)
+                    {
+                        Cursor.lockState = CursorLockMode.Locked;
+                        Cursor.visible = false;
+                        //m_MouseLook.SetCursorLock(true);
+                    }
+                    //m_MouseLook.UpdateCursorLock();
+                } else if (!showMenu)
+                {
+                    showMenu = true;
+                    inGameMenu.SetActive(true);
+                    canObserve = false;
+                    observing = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.lockState = CursorLockMode.Confined;
+                    Cursor.visible = true;
+                }
+            }
+
             if (canObserve) {
                 observeText.SetActive(true);
             } else if (showInfo) {
@@ -97,7 +137,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
             {
                 StartCoroutine(m_JumpBob.DoBobCycle());
-                PlayLandingSound();
+                //PlayLandingSound();
                 m_MoveDir.y = 0f;
                 m_Jumping = false;
             }
@@ -129,7 +169,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     hit.transform.SendMessage("HitByRay");
                     //Debug.Log("Sent");
                     showInfo = true;
-                } else {
+                }
+                else if (Physics.Raycast(ray, out hit, observeDistance-1f) && hit.transform.tag == "Key")
+                {
+                    //infoTextString = hit.transform.gameObject.GetComponent<Info>();
+                    hit.transform.SendMessage("HitByRay");
+                    
+                    //Debug.Log("Sent");
+                    showInfo = true;
+                }
+                else
+                {
                     canObserve = false;
                     showInfo = false;
                 }
@@ -148,9 +198,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void PlayLandingSound()
         {
-            m_AudioSource.clip = m_LandSound;
+            /*m_AudioSource.clip = m_LandSound;
             m_AudioSource.Play();
-            m_NextStep = m_StepCycle + .5f;
+            m_NextStep = m_StepCycle + .5f;*/
         }
 
 
@@ -175,13 +225,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_MoveDir.y = -m_StickToGroundForce;
 
-                if (m_Jump)
+                /*if (m_Jump)
                 {
                     m_MoveDir.y = m_JumpSpeed;
                     PlayJumpSound();
                     m_Jump = false;
                     m_Jumping = true;
-                }
+                }*/
             }
             else
             {
@@ -286,6 +336,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 // set the desired speed to be walking or running
                 speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
                 m_Input = new Vector2(horizontal, vertical);
+                
 
                 // normalize input if it exceeds 1 in combined length:
                 if (m_Input.sqrMagnitude > 1)
