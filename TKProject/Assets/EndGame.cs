@@ -7,7 +7,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class EndGame : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject FPSController, finishCanvas;
+    public GameObject FPSController, finishCanvas, panel;
     FirstPersonController FPSC;
     bool finished = false;
     void Start()
@@ -22,7 +22,7 @@ public class EndGame : MonoBehaviour
     // Update is called once per frame
     void HitByRay()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && panel.GetComponent<MissionProgress>().gotKeys == true)
         {
             FPSC.observing = true;
             FPSC.canObserve = false;

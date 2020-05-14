@@ -2597,6 +2597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FPSController: {fileID: 3930538074828314898}
   finishCanvas: {fileID: 851894707}
+  panel: {fileID: 2069776304}
 --- !u!4 &77875969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: dea90ab1aafb31b4e9900fad59bea5d0,
